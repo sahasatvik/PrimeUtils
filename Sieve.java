@@ -8,27 +8,27 @@ class Sieve {
 		
 	Sieve (int size) {
 		this.size = size;
-		sieve = new boolean[size+1];
+		sieve = new boolean[size+1];					// Create boolean array with each index representing a number. 
 		resetSieve ();
 		sievePrimes();
 	}
-	void resetSieve () {
-		for (int i = 1; i <+ size; i++) {
+	void resetSieve () {							// Mark all 'numbers' with true, representing 'not composite'
+		for (int i = 1; i <= size; i++) {
 			sieve[i] = true;	
 		}
 	}
-	void sievePrimes () {
-		int p = 2;
-		while ((p * p) <= size) {
-			int m = p * 2;
-			while (m <= size) {
-				sieve[m] = false;
-				m += p;
+	void sievePrimes () {							// 'Sieve' out all primes, which will remain marked true.
+		int p = 2;							// Start with 2.
+		while ((p * p) <= size) {					// 'Cross out' (mark false) multiples of p, such that p^2 <= size
+			int m = p * 2;						// Start by crossing out the second multiple of p ...
+			while (m <= size) {					// ... continue until the multiples reach size
+				sieve[m] = false;				// Cross out the multiple
+				m += p;						// Jump to the next multiple
 			} 
-			while (!sieve[++p]); 
+			while (!sieve[++p]);					// Increase p until it reaches an uncrossed number 
 		}
 	}
-	void displayPrimes (boolean count, boolean countOnly) {
+	void displayPrimes (boolean count, boolean countOnly) {			// Display all primes : numbers marked true
 		primeCount = 0;
 		for (int i = 2; i <= size; i++) {
 			if (sieve[i]) {
@@ -66,7 +66,7 @@ class Sieve {
 		System.out.println("\t\t-h or --help        :   Displays this text");
 		System.out.println("\t\t-c or --count       :   Displays number of primes detected");
 		System.out.println("\t\t-C or --count-only  :   Only outputs number of primes detected");
-		System.out.println("\t\tmaxnumber           :   Number below which primes are to be found (exclusive of maxNumber)\n");
+		System.out.println("\t\tmaxnumber           :   Number below which primes are to be found\n");
 	}
 
 	public static void main (String[] args) {
