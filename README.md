@@ -1,5 +1,5 @@
 # PrimeUtils
-A collection of simple programs which relate to prime nummbers !
+A collection of simple programs which relate to prime numbers !
 
 Programs in this repository :
 
@@ -11,7 +11,7 @@ Programs in this repository :
 + `Sieve` works extremely fast! Here is a timed example :
         
 	```
-        satvik@computer:~/Programming/PrimeUtils$ time java Sieve -C 100000000
+        satvik@computer:~/Programming/PrimeUtils$ time java Sieve --count-only 100000000
         5761455
         real	0m2.255s
         user	0m2.212s
