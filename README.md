@@ -7,8 +7,8 @@ Programs in this repository :
 | :------------:|-------------------------------------------------------|:--------------------------------------:|
 | Sieve         | Display prime numbers using the Sieve of Eratosthenes | `java Sieve [-h] [-c | -C] maxNumber`  |
 
-NOTES :
-    * `Sieve` works extremely fast! Here is a timed example :
+
++ `Sieve` works extremely fast! Here is a timed example :
         ```
         satvik@computer:~/Programming/PrimeUtils$ time java Sieve -C 100000000
         5761455
