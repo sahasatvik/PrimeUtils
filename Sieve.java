@@ -1,23 +1,22 @@
-import java.text.NumberFormat;
 
-class Sieve {
+public class Sieve {
 	
 	int size;
 	int primeCount;
 	boolean[] sieve;
 		
-	Sieve (int size) {
+	public Sieve (int size) {
 		this.size = size;
 		sieve = new boolean[size+1];					// Create boolean array with each index representing a number. 
 		resetSieve ();
 		sievePrimes();
 	}
-	void resetSieve () {							// Mark all 'numbers' with true, representing 'not composite'
+	public void resetSieve () {						// Mark all 'numbers' with true, representing 'not composite'
 		for (int i = 1; i <= size; i++) {
 			sieve[i] = true;	
 		}
 	}
-	void sievePrimes () {							// 'Sieve' out all primes, which will remain marked true.
+	public void sievePrimes () {						// 'Sieve' out all primes, which will remain marked true.
 		int p = 2;							// Start with 2.
 		while ((p * p) <= size) {					// 'Cross out' (mark false) multiples of p, such that p^2 <= size
 			int m = p * 2;						// Start by crossing out the second multiple of p ...
@@ -28,7 +27,7 @@ class Sieve {
 			while (!sieve[++p]);					// Increase p until it reaches an uncrossed number 
 		}
 	}
-	void displayPrimes (boolean count, boolean countOnly) {			// Display all primes : numbers marked true
+	public void displayPrimes (boolean count, boolean countOnly) {		// Display all primes : numbers marked true
 		primeCount = 0;
 		for (int i = 2; i <= size; i++) {
 			if (sieve[i]) {
@@ -49,17 +48,17 @@ class Sieve {
 		}
 	}
 	
-	static int argBase;
-	static int numberOfArgs;
-	static boolean help;
-	static boolean count;
-	static boolean countOnly;
+	private static int argBase;
+	private static int numberOfArgs;
+	private static boolean help;
+	private static boolean count;
+	private static boolean countOnly;
 
-	public static boolean hasMoreArgs () {
+	private static boolean hasMoreArgs () {
 	    return numberOfArgs > argBase;
 	}
 	
-	public static void displayHelp () {
+	private static void displayHelp () {
 		System.out.println("\nSieve - a simple program to display primes less than 'maxNumber' using the sieve of Eratosthenes.");
 		System.out.println("Usage :");
 		System.out.println("\tjava Sieve [-h] [-c | -C] maxNumber\n");
