@@ -77,7 +77,7 @@ class Sieve {
 		try {
 			help = !hasMoreArgs() || args[argBase].equals("-h") || args[argBase].equals("--help");
 			if (help) {
-			    displayHelp();
+				displayHelp();
 				argBase++;
 			}
 			if (hasMoreArgs()) {
@@ -85,10 +85,10 @@ class Sieve {
 				if (count) {
 					argBase++;
 				} else {
-				    countOnly = args[argBase].equals("-C") || args[argBase].equals("--count-only");
-				    if (countOnly) {
-   					    argBase++;
-   				    }
+					countOnly = args[argBase].equals("-C") || args[argBase].equals("--count-only");
+					if (countOnly) {
+   						argBase++;
+   					}
 				}
 				if (hasMoreArgs()) {
 					int size = Integer.parseInt(args[argBase]);
