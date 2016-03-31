@@ -1,5 +1,5 @@
 # PrimeUtils
-A collection of simple programs which relate to prime nummbers !
+A collection of simple programs which relate to prime numbers !
 
 Programs in this repository :
 
