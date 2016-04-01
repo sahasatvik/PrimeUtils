@@ -32,79 +32,63 @@ public class Sieve {
 		for (int i = 2; i <= size; i++) {
 			if (sieve[i]) {
 				primeCount++;
-				if (!countOnly) { 
+				if (!countOnly) { 				// Check whether only the count is to be displayed
 					System.out.printf("%d ", i);
 				}
 			}
 		}
-		if (countOnly) {
-			System.out.printf("%d", primeCount);
+		if (countOnly) {						// Check whether only the count is to be displayed
+			System.out.printf("%d", primeCount);			// Display the count
 		} else if (count) {
 			System.out.printf("%n");
-			System.out.printf("%nPrime Count : %d%n", primeCount);
+			System.out.printf("%nPrime Count : %d%n", primeCount);  // Display the count verbosely
 		} else {
 			System.out.printf("%n");
 		
 		}
 	}
 	
-	private static int argBase;
-	private static int numberOfArgs;
-	private static boolean help;
-	private static boolean count;
-	private static boolean countOnly;
-
-	private static boolean hasMoreArgs () {
-	    return numberOfArgs > argBase;
-	}
 	
-	private static void displayHelp () {
+	private static void displayHelp () {					// Display the helpText
 		System.out.println("\nSieve - a simple program to display primes less than 'maxNumber' using the sieve of Eratosthenes.");
 		System.out.println("Usage :");
-		System.out.println("\tjava Sieve [-h] [-c | -C] maxNumber\n");
+		System.out.println("\tjava Sieve [-h] [-cC] maxNumber\n");
 		System.out.println("\t\t-h or --help        :   Displays this text");
 		System.out.println("\t\t-c or --count       :   Displays number of primes detected");
-		System.out.println("\t\t-C or --count-only  :   Only outputs number of primes detected");
-		System.out.println("\t\tmaxnumber           :   Number below which primes are to be found\n");
+		System.out.println("\t\t-C or --count-only  :   Only outputs number of primes detected : overrides -c");
+		System.out.println("\t\tmaxNumber           :   Number below which primes are to be found\n");
 	}
 
 	public static void main (String[] args) {
-	
-		argBase = 0;
-		numberOfArgs = args.length;
+
+		Sieve eratosthenes;
+		String[][] switchTable = {{"-h", "--help"},			// Create a table of accepted options/switches ...
+					  {"-c", "--count"},			// ... to pass to the ArgHandler
+					  {"-C", "--count-only"}};		// Strings in each row are synonimous, eg, '-h' is also recognized as '--help'
+		ArgHandler a = new ArgHandler(args, switchTable, 1);		// Create an ArgHandler, pass (String[] args, String[][] switchTable, int minArgs)
 		
-		try {
-			help = !hasMoreArgs() || args[argBase].equals("-h") || args[argBase].equals("--help");
-			if (help) {
-				displayHelp();
-				argBase++;
-			}
-			if (hasMoreArgs()) {
-				count = args[argBase].equals("-c") || args[argBase].equals("--count");
-				if (count) {
-					argBase++;
-				} else {
-					countOnly = args[argBase].equals("-C") || args[argBase].equals("--count-only");
-					if (countOnly) {
-   						argBase++;
-   					}
-				}
-				if (hasMoreArgs()) {
-					int size = Integer.parseInt(args[argBase]);
-					if (size > 1) {
-						Sieve eratosthenes = new Sieve(size);
-						eratosthenes.displayPrimes(count, countOnly);
-					} else {
-						System.out.println("maxNumber is too less ! Try keeping maxNumber above 1");
-					}
-				} else {
-					System.out.println("Too few arguments !");
-				}
-			}
-		} catch (NumberFormatException e) {
+		if (a.isOn('h')) {						// Check whether the user passed '-h' or '--help'
+			displayHelp();						// Display a help message
+		} else if (a.optionNotFound()) {				// Check whether the user passed an unrecognized option
+			System.out.println("Options " + a.getUnknownOptions() + " not found !");
 			System.out.println("Incorrect usage ! Type in    java Sieve -h    to see correct usage");
-		} catch (Exception e) {
-			System.out.println("Exception !" + e.getMessage());
+		} else if (a.hasTooFewArgs()) {					// Check whether the user passed too few arguments
+			System.out.println("Too few arguments entered !");
+			System.out.println("Incorrect usage ! Type in    java Sieve -h    to see correct usage");
+		} else {
+			
+			boolean count = a.isOn('c');				// Fetch the switches for --count ...
+			boolean countOnly = a.isOn('C');			// ... and --count-only
+
+			try {
+				eratosthenes = new Sieve(Integer.parseInt(a.popArg())); // Pop the first argument, parse as an Integer and pass it to Sieve (int)
+				eratosthenes.displayPrimes(count, countOnly);	// Display the sieve, according to the user's options
+			} catch (NumberFormatException e) {			// Catch exceptions
+				System.out.println("Not a number !");		
+				System.out.println("Incorrect usage ! Type in    java Sieve -h    to see correct usage");
+			} catch (Exception e) {
+				System.out.println("Unknown exception !");
+			}		
 		}
 	}
 }
