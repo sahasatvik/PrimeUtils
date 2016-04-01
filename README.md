@@ -20,7 +20,7 @@ Programs in this repository :
 
 * `ArgHandler` is a small program to simplify the interpretation of command line arguments. Implementing it is 
 as simple as creating a "switch table" (which declares all switches to be used) and passing this, along with the 
-arguments (`args[]`) )array and the minimum number of arguments (excluding switches) to `ArgHandler(String[], String[][], int)`. 
+arguments (`args[]`) array and the minimum number of arguments (excluding switches) to `ArgHandler(String[], String[][], int)`. 
 After `ArgHandler` processes the data, you can query whether a switch is on, push and pop arguments into and out of the argument 
 queue and detect errors such as missing arguments, unrecognized options, etc. Explore `ArgHandler.java` to find out all of it's 
 features, and check out `Sieve.java` and `PrimeTest.java` to understand it's implementation.
