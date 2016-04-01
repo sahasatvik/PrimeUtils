@@ -10,11 +10,13 @@ Programs in this repository :
 
 + `Sieve` works extremely fast! Here is a timed example :
     
+    ````    
     satvik@computer:~/Programming/PrimeUtils$ time java Sieve --count-only 100000000
     5761455
     real	0m2.255s
     user	0m2.212s
     sys		0m0.048s
+    ````
 
 * `ArgHandler` is a small program to simplify the interpretation of command line arguments. Implementing it is as
 simple as creating a "switch table", which declares all switches to be used and passing this, along with the `args[]`
