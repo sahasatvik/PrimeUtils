@@ -1,21 +1,17 @@
 # PrimeUtils
 A collection of simple programs which relate to prime numbers !
 
-
-## Compiling the Programs
-Compiling the programs in this repository is as simple as executing the following code in the directory containing the `.java` files :
-
-    javac *.java
-
 ## Using the Programs
+The programs in this repository can be executed in the command line of any machine running any OS with a JVM installed.
 Following is a list of the programs in this repository :
 
-| Program Name  | Purpose                                               | Usage                                  |
-| :------------:|-------------------------------------------------------|----------------------------------------|
-| Sieve         | Display prime numbers using the Sieve of Eratosthenes | `java Sieve [-h] [-cC] maxNumber`      |
-| PrimeTest     | Test whether the number passed to it is prime         | `java PrimeTest [-h] number`           |
+| Program Name  | Description                                            | Usage                                  |
+| :------------:|--------------------------------------------------------|----------------------------------------|
+| Sieve         | Displays prime numbers using the Sieve of Eratosthenes | `java Sieve [-h] [-cC] maxNumber`      |
+| PrimeTest     | Tests whether the number passed to it is prime         | `java PrimeTest [-h] number`           |
 
 
+##Notes
 * Each program has it's own extensive help-text, which you can read by executing :
     ```
     java <program name> --help
