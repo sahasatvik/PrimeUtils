@@ -1,20 +1,27 @@
 # PrimeUtils
 A collection of simple programs which relate to prime numbers !
 
-Programs in this repository :
+
+## Compiling the Programs
+Compiling the programs in this repository is as simple as executing the following code in the directory containing the `.java` files :
+
+    javac *.java
+
+## Using the Programs
+Following is a list of the programs in this repository :
 
 | Program Name  | Purpose                                               | Usage                                  |
-| :------------:|-------------------------------------------------------|:--------------------------------------:|
+| :------------:|-------------------------------------------------------|----------------------------------------|
 | Sieve         | Display prime numbers using the Sieve of Eratosthenes | `java Sieve [-h] [-cC] maxNumber`      |
 | PrimeTest     | Test whether the number passed to it is prime         | `java PrimeTest [-h] number`           |
 
 
-* Each program has an extensive help-text, which you can read by executing :
+* Each program has it's own extensive help-text, which you can read by executing :
     ```
     java <program name> --help
     ```
 
-+ `Sieve` works extremely fast! Here is a timed example :
+* `Sieve` works extremely fast! Here is a timed example :
     
     ```    
     satvik@computer:~/Programming/PrimeUtils$ time java Sieve --count-only 100000000
