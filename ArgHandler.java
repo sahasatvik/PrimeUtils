@@ -1,67 +1,68 @@
 
 public class ArgHandler {
 
-	private boolean[] switches;
-	private String[][] switchTable;
+	private boolean[] flags;
+	private String[][] flagTable;
 
 	private String[] arguments;
 	private String[] rawArgs;
 	private int minArgs;
 	
 	private boolean tooFewArgs;
-	private boolean optionNotFound;
-	private String unknownOptions;
+	private boolean flagNotFound;
+	private String unknownFlags;
 
-	public ArgHandler (String[] args, String[][] switchTable, int minArgs) {
+	public ArgHandler (String[] args, String[][] flagTable, int minArgs) {
 		
-		switches = new boolean[256];
+		flags = new boolean[256];
 		rawArgs = new String[args.length];
 
-		this.switchTable = new String[switchTable.length][2];
-		for (int i = 0; i < switchTable.length; i++) {
+		this.flagTable = new String[flagTable.length][2];
+		for (int i = 0; i < flagTable.length; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.switchTable[i][j] = switchTable[i][j];
+				this.flagTable[i][j] = flagTable[i][j];
 			}
 		}
 		for (int i = 0; i < args.length; i++) {
 			rawArgs[i] = args[i];
 		}
 		for (int i = 0; i < 256; i++) {
-			switches[i] = false;
+			flags[i] = false;
 		}
 		arguments = new String[0];
-		optionNotFound = false;
-		unknownOptions = "";
+		flagNotFound = false;
+		unknownFlags = "";
 
-		processSwitches(args);
+		processflags(args);
 		
 		tooFewArgs = (arguments.length < minArgs);
 	}
 
-	private void processSwitches (String[] args) {
+	private void processflags (String[] args) {
 		for (String arg : args) {
-			if (processSwitches(arg)) {
+			if (processflags(arg)) {
 				pushArg(arg);
 			}
 		}
 	}
-	private boolean processSwitches (String arg) {
+	private boolean processflags (String arg) {
 		if (arg.charAt(0) == '-') {
+			arg = arg.substring(0, (arg.indexOf("=") == -1)? arg.length() : arg.indexOf("="));
 			if (arg.charAt(1) == '-') {
 				if (isInTable(arg)) {
 					char opt = getShortOpt(arg);
-					switches[opt] = true;
+					flags[opt] = true;
 				} else {
-					unknownOptions += " " + arg;
-					optionNotFound = true;
+					unknownFlags += " " + arg;
+					flagNotFound = true;
 				}
 			} else {
 				for (int i = 1; i < arg.length(); i++) {
 					if (isInTable(("-" + arg.charAt(i)))) {
-						switches[(int)arg.charAt(i)] = true;
+						flags[(int)arg.charAt(i)] = true;
 					} else {
-						unknownOptions += " -" + arg.charAt(i);
-						optionNotFound = true;
+						unknownFlags += " -" + arg.charAt(i);
+						flagNotFound = true;
 					}
 				}
 			}
@@ -69,20 +70,23 @@ public class ArgHandler {
 		}
 		return true;
 	}
-	public boolean isOn (char c) {
-		return switches[(int)c];
+	public boolean checkFlag (char c) {
+		return flags[(int)c];
 	}
-	public boolean isOn (String s) {
-		return isOn(getShortOpt(s));
+	public boolean checkFlag (String s) {
+		return checkFlag(getShortOpt(s));
 	}
 	public boolean hasTooFewArgs () {
 		return tooFewArgs;
 	}
-	public boolean optionNotFound () {
-		return optionNotFound;
+	public boolean hasUnknownFlag () {
+		return flagNotFound;
 	}
-	public String getUnknownOptions () {
-		return unknownOptions;
+	public String getUnknownFlags () {
+		return unknownFlags;
+	}
+	public boolean hasMoreArgs () {
+		return (arguments.length > 0);
 	}
 	public boolean hasArg (String arg) {
 		for (String a : arguments) {
@@ -92,7 +96,79 @@ public class ArgHandler {
 		}
 		return false;
 	}
-	public void pushArg (String arg) {
+	public String next () {
+		return popArg (0);
+	}
+	public int nextInt () {
+		return nextInt(0);
+	}
+	public double nextDouble () {
+		return nextDouble(0);
+	}
+	public int nextInt (int i) {
+		int x = 0;
+		while (i < arguments.length) {
+			try {
+				x = Integer.parseInt(arguments[i]);
+				popArg(i);
+				return x;
+			} catch (NumberFormatException e) {
+				i++;
+			}
+		}
+		return Integer.MIN_VALUE;
+	}
+	public double nextDouble (int i) {
+		double x = 0;
+		while (i < arguments.length) {
+			try {
+				x = Double.parseDouble(arguments[i]);
+				popArg(i);
+				return x;
+			} catch (NumberFormatException e) {
+				i++;
+			}
+		}
+		return Double.MIN_VALUE;
+	}
+	public String valueOf (String s) {
+		return valueOf(getShortOpt(s));
+	}
+	public String valueOf (char c) {
+		if (checkFlag(c)) {
+			int rawIndex = rawIndexOfFlag(c);
+			String s = rawArgs[rawIndex];
+			s = s.substring(((s.indexOf("=") == -1)? s.length() : (s.indexOf("=") + 1)), s.length());
+			return s;
+		}
+		return "";
+	}
+	private int indexOfArg (String s) {
+		int i = -1;
+		if (hasArg(s)) {
+			while (!arguments[++i].equals(s));
+		}
+		return i;
+	}
+	private int rawIndexOfFlag (char c) {
+		for (int i = 0; i < rawArgs.length; i++) {
+			String s = rawArgs[i];
+			s = s.substring(0, (s.indexOf("=") == -1)? s.length() : s.indexOf("="));
+			if (s.charAt(0) == '-') {
+				if ((s.charAt(1) == '-') && (s.equals(getLongOpt(c)))) {
+					return i;
+				} else {
+					for (int j = 1; j < s.length(); j++) {
+						if (s.charAt(j) == c) {
+							return i;
+						}
+					}
+				}
+			}
+		}
+		return -1;
+	}
+	private void pushArg (String arg) {
 		String[] t = new String[arguments.length];
 		for (int i = 0; i < arguments.length; i++) {
 			t[i] = arguments[i];
@@ -103,23 +179,26 @@ public class ArgHandler {
 		}
 		arguments[t.length] = arg;
 	}
-	public String popArg () {
-		if (arguments.length > 0) {
-			String arg = arguments[0];
+	private String popArg (int n) {
+		if ((arguments.length > 0) && (n >= 0) && (n < arguments.length)) {
+			String arg = arguments[n];
 			String[] t = new String[arguments.length];
 			for (int i = 0; i < arguments.length; i++) {
 				t[i] = arguments[i];
 			}
 			arguments = new String[t.length - 1];
-			for (int i = 1; i < t.length; i++) {
-				arguments[i - 1] = t[i];
+			for (int i = 0; i < n; i++) {
+				arguments[i] = t[i];
+			}
+			for (int i = n; i < arguments.length; i++) {
+				arguments[i] = t[i+1];
 			}
 			return arg;
 		} 
 		return "";
 	}
-	public boolean isInTable (String s) {
-		for (String line[] : switchTable) {
+	private boolean isInTable (String s) {
+		for (String line[] : flagTable) {
 			for (String option : line) {
 				if (s.equals(option)) {
 					return true;
@@ -128,16 +207,16 @@ public class ArgHandler {
 		}
 		return false;
 	}
-	public char getShortOpt (String s) {
-		for (String line[] : switchTable) {
+	private char getShortOpt (String s) {
+		for (String line[] : flagTable) {
 			if (line[1].equals(s)) {
 				return line[0].charAt(1);
 			}
 		}
 		return '-';
 	}
-	public String getLongOpt (char c) {
-		for (String line[] : switchTable) {
+	private String getLongOpt (char c) {
+		for (String line[] : flagTable) {
 			if (line[0].charAt(1) == c) {
 				return line[1];
 			}

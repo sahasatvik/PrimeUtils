@@ -1,19 +1,19 @@
 
 public class Sieve {
-	
+
 	int size;
 	int primeCount;
 	boolean[] sieve;
-		
+
 	public Sieve (int size) {
 		this.size = size;
-		sieve = new boolean[size+1];					// Create boolean array with each index representing a number. 
+		sieve = new boolean[size+1];					// Create boolean array with each index representing a number.
 		resetSieve ();
 		sievePrimes();
 	}
 	public void resetSieve () {						// Mark all 'numbers' with true, representing 'not composite'
 		for (int i = 1; i <= size; i++) {
-			sieve[i] = true;	
+			sieve[i] = true;
 		}
 	}
 	public void sievePrimes () {						// 'Sieve' out all primes, which will remain marked true.
@@ -24,7 +24,7 @@ public class Sieve {
 				sieve[m] = false;				// Cross out the multiple
 				m += p;						// Jump to the next multiple
 			} 
-			while (!sieve[++p]);					// Increase p until it reaches an uncrossed number 
+			while (!sieve[++p]);					// Increase p until it reaches an uncrossed number
 		}
 	}
 	public void displayPrimes (boolean count, boolean countOnly) {		// Display all primes : numbers marked true
@@ -44,11 +44,10 @@ public class Sieve {
 			System.out.printf("%nPrime Count : %d%n", primeCount);  // Display the count verbosely
 		} else {
 			System.out.printf("%n");
-		
 		}
 	}
-	
-	
+
+
 	private static void displayHelp () {					// Display the helpText
 		System.out.println("\nSieve - a simple program to display primes less than 'maxNumber' using the sieve of Eratosthenes.");
 		System.out.println("Usage :");
@@ -62,33 +61,32 @@ public class Sieve {
 	public static void main (String[] args) {
 
 		Sieve eratosthenes;
-		String[][] switchTable = {{"-h", "--help"},			// Create a table of accepted options/switches ...
+		String[][] flagTable = {{"-h", "--help"},			// Create a table of accepted flags ...
 					  {"-c", "--count"},			// ... to pass to the ArgHandler
 					  {"-C", "--count-only"}};		// Strings in each row are synonimous, eg, '-h' is also recognized as '--help'
-		ArgHandler a = new ArgHandler(args, switchTable, 1);		// Create an ArgHandler, pass (String[] args, String[][] switchTable, int minArgs)
-		
-		if (a.isOn('h')) {						// Check whether the user passed '-h' or '--help'
+		ArgHandler a = new ArgHandler(args, flagTable, 1);		// Create an ArgHandler, pass to (String[] args, String[][] flagTable, int minArgs)
+
+		if (a.checkFlag('h')) {						// Check whether the user passed '-h' or '--help'
 			displayHelp();						// Display a help message
-		} else if (a.optionNotFound()) {				// Check whether the user passed an unrecognized option
-			System.out.println("Options " + a.getUnknownOptions() + " not found !");
+		} else if (a.hasUnknownFlag()) {				// Check whether the user passed an unrecognized flag
+			System.out.println("Flags " + a.getUnknownFlags() + " not found !");
 			System.out.println("Incorrect usage ! Type in    java Sieve -h    to see correct usage");
 		} else if (a.hasTooFewArgs()) {					// Check whether the user passed too few arguments
 			System.out.println("Too few arguments entered !");
 			System.out.println("Incorrect usage ! Type in    java Sieve -h    to see correct usage");
 		} else {
-			
-			boolean count = a.isOn('c');				// Fetch the switches for --count ...
-			boolean countOnly = a.isOn('C');			// ... and --count-only
 
-			try {
-				eratosthenes = new Sieve(Integer.parseInt(a.popArg())); // Pop the first argument, parse as an Integer and pass it to Sieve (int)
+			boolean count = a.checkFlag('c');			// Fetch the flags for --count ...
+			boolean countOnly = a.checkFlag('C');			// ... and --count-only
+			int maxNumber = a.nextInt();				// Pop the first argument (parsed as an Integer)
+
+			if (maxNumber != Integer.MIN_VALUE) {			// Check whether the user has actually entered an int
+				eratosthenes = new Sieve(maxNumber);
 				eratosthenes.displayPrimes(count, countOnly);	// Display the sieve, according to the user's options
-			} catch (NumberFormatException e) {			// Catch exceptions
-				System.out.println("Not a number !");		
+			} else {
+				System.out.println("Not a number !");
 				System.out.println("Incorrect usage ! Type in    java Sieve -h    to see correct usage");
-			} catch (Exception e) {
-				System.out.println("Unknown exception !");
-			}		
+			}
 		}
 	}
 }

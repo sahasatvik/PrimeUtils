@@ -27,29 +27,27 @@ public class PrimeTest {
 		System.out.println("\t\tnumber              :   Number whose primality is to be tested\n");
 	}
 	public static void main (String[] args) {
-		
 
-		String[][] switchTable = {{"-h", "--help"}};				// Create a table of accepted options/switches to pass to the ArgHandler
-		ArgHandler a = new ArgHandler(args, switchTable, 1);			// Create an ArgHandler
-		
-		if (a.isOn('h')) {							// Check whether the user passed '-h' or '--help'
+
+		String[][] flagTable = {{"-h", "--help"}};				// Create a table of accepted flags to pass to the ArgHandler
+		ArgHandler a = new ArgHandler(args, flagTable, 1);			// Create an ArgHandler
+
+		if (a.checkFlag('h')) {							// Check whether the user passed '-h' or '--help'
 			displayHelp();							// Display a help message
-		} else if (a.optionNotFound()) {					// Check whether the user passed an unrecognized option
-			System.out.println("Options " + a.getUnknownOptions() + " not found !");
+		} else if (a.hasUnknownFlag()) {					// Check whether the user passed an unrecognized flag
+			System.out.println("Flags " + a.getUnknownFlags() + " not found !");
 			System.out.println("Incorrect usage ! Type in    java PrimeTest -h    to see correct usage");
 		} else if (a.hasTooFewArgs()) {						// Check whether the user passed too few arguments
 			System.out.println("Too few arguments entered !");
 			System.out.println("Incorrect usage ! Type in    java PrimeTest -h    to see correct usage");
 		} else {
-			try {
-				int n = Integer.parseInt(args[0]);
+			int n = a.nextInt();						// Pop the first argument (parsed as an Integer)
+			if (n != Integer.MIN_VALUE) {					// Check whether the user has actually entered an int
 				System.out.println(PrimeTest.test(n));
-			} catch (NumberFormatException e) {				// Catch exceptions
-				System.out.println("Not a number !");		
+			} else {
+				System.out.println("Not a number !");
 				System.out.println("Incorrect usage ! Type in    java PrimeTest -h    to see correct usage");
-			} catch (Exception e) {
-				System.out.println("Unknown exception !");
-			}		
+			}
 		}
 	}
-} 
+}
