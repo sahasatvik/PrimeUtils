@@ -131,10 +131,10 @@ public class ArgHandler {
 		}
 		return Double.MIN_VALUE;
 	}
-	public String valueOf (String s) {
-		return valueOf(getShortOpt(s));
+	public String valueOfFlag (String s) {
+		return valueOfFlag(getShortOpt(s));
 	}
-	public String valueOf (char c) {
+	public String valueOfFlag (char c) {
 		if (checkFlag(c)) {
 			int rawIndex = rawIndexOfFlag(c);
 			String s = rawArgs[rawIndex];
