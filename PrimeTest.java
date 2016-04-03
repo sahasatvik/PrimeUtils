@@ -1,4 +1,6 @@
 
+import com.satvik.cli.args.ArgHandler;
+
 public class PrimeTest {
 
 	public static boolean test (long n) {

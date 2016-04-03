@@ -1,3 +1,6 @@
+
+package	com.satvik.cli.args;
+
 /**
  * ArgHandler is a class which parses command line arguments, and enables simple retrieval
  * of flags and arguments. Any class which needs to use this library must create an ArgHandler
@@ -29,7 +32,7 @@
  * 		. 
  *      
  * 		String[][] flagTable = {{"-h", "--help"},	// Here, Strings in each row
- * 					{"-M", "-max-value"},	// will be trigger the sam
+ * 					{"-M", "-max-value"},	// will be trigger the same
  * 					{"-m", "-min-value"}};	// flags if present in 'args[]'
  * 
  * 		int minArgs = 2;				// Specify that 2 arguments are required
@@ -81,10 +84,12 @@
  */
 
 public class ArgHandler {
+	
 	/**
 	 * Boolean array storing the state of flags, indexed by the flag character.
 	 */
 	private boolean[] flags;
+	
 	/**
 	 * Matrix of Strings, representing synonimous forms of the same flag.
 	 */
@@ -94,6 +99,7 @@ public class ArgHandler {
 	 * String array, storing the elements of the queue of arguments. 
 	 */
 	private String[] arguments;
+	
 	/**
 	 * String array, storing the elements of the queue of unprocessed arguments and flags.
 	 */
